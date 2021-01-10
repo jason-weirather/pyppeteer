@@ -19,20 +19,29 @@ from pyppeteer import __chromium_revision__, __pyppeteer_home__
 logger = logging.getLogger(__name__)
 
 DOWNLOADS_FOLDER = Path(__pyppeteer_home__) / 'local-chromium'
-DEFAULT_DOWNLOAD_HOST = 'https://storage.googleapis.com'
+#DEFAULT_DOWNLOAD_HOST = 'https://storage.googleapis.com'
+DEFAULT_DOWNLOAD_HOST = 'https://valor.808.io'
 DOWNLOAD_HOST = os.environ.get(
-    'PYPPETEER_DOWNLOAD_HOST', DEFAULT_DOWNLOAD_HOST)
-BASE_URL = f'{DOWNLOAD_HOST}/chromium-browser-snapshots'
+    DEFAULT_DOWNLOAD_HOST)
+#BASE_URL = f'{DOWNLOAD_HOST}/chromium-browser-snapshots'
+BASE_URL = f'{DOWNLOAD_HOST}'
 
-REVISION = os.environ.get(
-    'PYPPETEER_CHROMIUM_REVISION', __chromium_revision__)
+#REVISION = os.environ.get(
+#    'PYPPETEER_CHROMIUM_REVISION', __chromium_revision__)
+REVISION = '80217'
 
 NO_PROGRESS_BAR = os.environ.get('PYPPETEER_NO_PROGRESS_BAR', '')
 if NO_PROGRESS_BAR.lower() in ('1', 'true'):
     NO_PROGRESS_BAR = True  # type: ignore
 
+#downloadURLs = {
+#    'linux': f'{BASE_URL}/Linux_x64/{REVISION}/chrome-linux.zip',
+#    'mac': f'{BASE_URL}/Mac/{REVISION}/chrome-mac.zip',
+#    'win32': f'{BASE_URL}/Win/{REVISION}/chrome-win32.zip',
+#    'win64': f'{BASE_URL}/Win_x64/{REVISION}/chrome-win32.zip',
+#}
 downloadURLs = {
-    'linux': f'{BASE_URL}/Linux_x64/{REVISION}/chrome-linux.zip',
+    'linux': f'{BASE_URL}/chrome-linux.zip',
     'mac': f'{BASE_URL}/Mac/{REVISION}/chrome-mac.zip',
     'win32': f'{BASE_URL}/Win/{REVISION}/chrome-win32.zip',
     'win64': f'{BASE_URL}/Win_x64/{REVISION}/chrome-win32.zip',
@@ -140,7 +149,10 @@ def extract_zip(data: BytesIO, path: Path) -> None:
 
 def download_chromium() -> None:
     """Download and extract chromium."""
-    extract_zip(download_zip(get_url()), DOWNLOADS_FOLDER / REVISION)
+    #extract_zip(download_zip(get_url()), DOWNLOADS_FOLDER / REVISION)
+    with open('/home/x/chrome-linux.zip', 'rb') as fh:
+        buf = BytesIO(fh.read())
+    extract_zip(buf, DOWNLOADS_FOLDER / REVISION)
 
 
 def chromium_excutable() -> Path:
